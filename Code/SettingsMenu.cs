@@ -18,6 +18,7 @@ namespace akaUdon
     {
         #region instance variables
         [SerializeField] Color _OffColor = Color.grey;
+        [SerializeField] private bool _toggleColor = true;
         private readonly string settings = "akalink-Settings";
         private int defaultstate;
 
@@ -137,32 +138,32 @@ namespace akaUdon
             if (_colliders.Length > 0 && Utilities.IsValid(_colliders[0]))
             {
                 colsState = _colliders[0].enabled;
-                ToggleHelperColliders(colsState, _colliders, _colliderButton, _collidersOnColor);
+                ToggleCollidersHelper(colsState, _colliders, _colliderButton, _collidersOnColor);
             }
 
             if (_pickUpObjects.Length > 0 && Utilities.IsValid(_pickUpObjects[0]))
             {
                 pickupState = _pickUpObjects[0].activeSelf;
-                TogglePickups();
+                ToggleObjectsHelper(pickupState, _pickUpObjects, _pickUpButton, _pickUpsOnColor);
             }
             
 
             if (_chairColliders.Length > 0 && Utilities.IsValid(_chairColliders[0]))
             {
                 chairState = _chairColliders[0].enabled;
-                ToggleChairs();
+                ToggleCollidersHelper(chairState, _chairColliders, _chairButton, _chairsOnColor);
             }
 
             if (Utilities.IsValid(_audiolink))
             {
                 aLState = _audiolink.activeSelf;
-                ToggleAudioLink();
+                ToggleObjectsHelper(aLState, new []{_audiolink}, _audioLinkButton, _audioLinkOnColor);
             }
 
             if (Utilities.IsValid(_pensObject))
             {
                 pensState = _pensObject.activeSelf;
-                TogglePens();
+                ToggleObjectsHelper(pensState, new []{_pensObject}, _pensButton, _pensOnColor);
             }
 
             if (!Utilities.IsValid(_ppAnimator))
@@ -180,23 +181,18 @@ namespace akaUdon
         public void _PpDarknessSlider()
         {
             lightState = _sliderLight.value;
-            PpDarkness();
+            SetAnimatorValue(lightnessAnim, lightState);
         }
-        private void PpDarkness()
-        {
-            _ppAnimator.SetFloat(lightnessAnim, lightState);
-            SaveButtonAndColorDisable();
-        }
-
+        
         public void _PpBloomSlider()
         {
             bloomSate = _sliderBloom.value;
-            PpBloom();
+            SetAnimatorValue(bloomAnim, bloomSate);
         }
-
-        private void PpBloom()
+        
+        private void SetAnimatorValue(string name, float state)
         {
-            _ppAnimator.SetFloat(bloomAnim, bloomSate);
+            _ppAnimator.SetFloat(name, state);
             SaveButtonAndColorDisable();
         }
 
@@ -247,15 +243,10 @@ namespace akaUdon
                 return;
             }
             aLState = !aLState;
-            ToggleAudioLink();
+
+            ToggleObjectsHelper(aLState, new []{_audiolink}, _audioLinkButton, _audioLinkOnColor);
         }
-        
-        private void ToggleAudioLink()
-        {
-            if(Utilities.IsValid(_audiolink)) _audiolink.SetActive(aLState);
-            if (Utilities.IsValid(_audioLinkButton)) _audioLinkButton.color = aLState ? _audioLinkOnColor : _OffColor;
-            SaveButtonAndColorDisable();
-        }
+
         #endregion
 
         #region Colliders
@@ -269,21 +260,8 @@ namespace akaUdon
             }
             colsState = !colsState;
             
-            ToggleHelperColliders(colsState, _colliders, _colliderButton, _collidersOnColor);
-            // ToggleColliders();
+            ToggleCollidersHelper(colsState, _colliders, _colliderButton, _collidersOnColor);
         }
-
-        // private void ToggleColliders()
-        // {
-        //     foreach (Collider c in _colliders)
-        //     {
-        //         if(Utilities.IsValid(c)) c.enabled = colsState;
-        //     }
-        //
-        //     if(Utilities.IsValid(_colliderButton)) _colliderButton.color = colsState ? _collidersOnColor : Color.gray;
-        //     SaveButtonAndColorDisable();
-        //
-        // }
 
         #endregion
 
@@ -297,19 +275,7 @@ namespace akaUdon
                 return;
             }
             pickupState = !pickupState;
-            TogglePickups();
-        }
-
-        private void TogglePickups()
-        {
-            foreach (GameObject obj in _pickUpObjects)
-            {
-                if(Utilities.IsValid(obj)) obj.SetActive(pickupState);
-                
-            }
-
-            if(Utilities.IsValid(_pickUpButton))_pickUpButton.color = pickupState ? _pickUpsOnColor : _OffColor;
-            SaveButtonAndColorDisable();
+            ToggleObjectsHelper(pickupState, _pickUpObjects, _pickUpButton, _pickUpsOnColor);
         }
         
         #endregion
@@ -318,26 +284,14 @@ namespace akaUdon
 
         public void _ToggleChairsButton()
         {
-            if (_chairColliders.Length < 1 || !Utilities.IsValid(_chairColliders[0]))
+            if (_chairColliders.Length < 1)
             {
                 Debug.LogError($"{DateTime.Now} {gameObject.name}-The Chairs toggle is not assigned properly, make sure you assigned items to toggle");
                 return;
             }
             chairState = !chairState;
-            ToggleChairs();
+            ToggleCollidersHelper(chairState, _chairColliders, _chairButton, _chairsOnColor);
         }
-
-        private void ToggleChairs()
-        {
-            foreach (Collider ch in _chairColliders)
-            {
-                if(Utilities.IsValid(ch)) ch.enabled = chairState;
-            }
-
-            if(Utilities.IsValid(_chairButton))_chairButton.color = chairState ? _chairsOnColor : _OffColor;
-            SaveButtonAndColorDisable();
-        }
-        
 
         #endregion
         
@@ -351,15 +305,10 @@ namespace akaUdon
                 return;
             }
             pensState = !pensState;
-            TogglePens();
+            ToggleObjectsHelper(pensState, new []{_pensObject}, _pensButton, _pensOnColor);
+            
         }
 
-        private void TogglePens()
-        {
-            if(Utilities.IsValid(_pensObject)) _pensObject.SetActive(pensState);
-            if(Utilities.IsValid(_pensButton))_pensButton.color = pensState ? _pensOnColor : _OffColor;
-            SaveButtonAndColorDisable();
-        }
         #endregion
 
         #region Custom Options
@@ -407,21 +356,48 @@ namespace akaUdon
 
         #endregion
 
-        private void ToggleHelperColliders(bool state, Collider[] colliders, Image button, Color onColor)
+        #region helpers
+
+        private void ToggleCollidersHelper(bool state, Collider[] colliders, Image button, Color onColor)
         {
+            SaveButtonAndColorDisable();
             foreach (Collider c in  colliders)
             {
                 if (Utilities.IsValid(c)) c.enabled = state;
             }
-             ToggleImageHelper(state, button, onColor);
+            ToggleImageHelper(state, button, onColor);
         }
+
+        private void ToggleObjectsHelper(bool state, GameObject[] objects, Image button, Color onColor)
+        {
+            SaveButtonAndColorDisable();
+            foreach (GameObject obj in objects)
+            {
+                if(Utilities.IsValid(obj)) obj.SetActive(state); 
+            }
+            ToggleImageHelper(state, button, onColor);
+        }
+        
 
         private void ToggleImageHelper(bool state, Image button, Color onColor)
         {
+            if(!_toggleColor) return;
             if (Utilities.IsValid(button)) button.color = state ? onColor : _OffColor;
-            SaveButtonAndColorDisable();
         }
         
+        private string ConvertToNeededLength(string value, int length)
+        {
+            StringBuilder sb = new StringBuilder(value, length);
+            
+            
+            while (sb.Length < length) 
+            {
+                sb.Insert(0, "0");
+            }
+
+            return sb.ToString();
+        }
+        #endregion
         
         //Everything in this region is used for handling persistence and binary to int conversion. I high recommend you do not edit this code.
         #region Saving Persistance 
@@ -494,13 +470,13 @@ namespace akaUdon
             
             lightState = (float) Convert.ToInt32(tempStr, 2) / 255;
 
-            PpDarkness();
+            SetAnimatorValue(lightnessAnim, lightState);
             _sliderLight.value = lightState;
 
             tempStr = stateStr.Substring(8, 8);
             
             bloomSate = (float) Convert.ToInt32(tempStr, 2) / 255;
-            PpBloom();
+            SetAnimatorValue(bloomAnim, bloomSate);
             _sliderBloom.value = bloomSate;
 
             
@@ -509,33 +485,19 @@ namespace akaUdon
             ppState = stateStr[24] == '1';
             TogglePostProcessing();
             aLState = stateStr[25] == '1';
-            ToggleAudioLink();
+            ToggleObjectsHelper(aLState, new []{_audiolink}, _audioLinkButton, _audioLinkOnColor);
             colsState = stateStr[26] == '1';
-            ToggleHelperColliders(colsState, _colliders, _colliderButton, _collidersOnColor);
+            ToggleCollidersHelper(colsState, _colliders, _colliderButton, _collidersOnColor);
             pickupState= stateStr[27] == '1';
-            TogglePickups();
+            ToggleObjectsHelper(pickupState, _pickUpObjects, _pickUpButton, _pickUpsOnColor);
             chairState = stateStr[28] == '1';
-            ToggleChairs();
+            ToggleCollidersHelper(chairState, _chairColliders, _chairButton, _chairsOnColor);
             pensState = stateStr[29] == '1';
-            TogglePens();
+            ToggleObjectsHelper(pensState, new []{_pensObject}, _pensButton, _pensOnColor);
             customBoolState1 = stateStr[30] == '1';
             customBoolState2 = stateStr[31] == '1';
         }
 
-        //This is a utility method, it will guarantee any string is the exact length needed.
-        private string ConvertToNeededLength(string value, int length)
-        {
-            StringBuilder sb = new StringBuilder(value, length);
-            
-            
-            while (sb.Length < length) 
-            {
-                sb.Insert(0, "0");
-            }
-
-            return sb.ToString();
-        }
-        
         #endregion
 
         #region save button visuals
