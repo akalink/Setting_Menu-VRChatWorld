@@ -137,7 +137,7 @@ namespace akaUdon
             if (_colliders.Length > 0 && Utilities.IsValid(_colliders[0]))
             {
                 colsState = _colliders[0].enabled;
-                ToggleColliders();
+                ToggleHelperColliders(colsState, _colliders, _colliderButton, _collidersOnColor);
             }
 
             if (_pickUpObjects.Length > 0 && Utilities.IsValid(_pickUpObjects[0]))
@@ -252,7 +252,7 @@ namespace akaUdon
         
         private void ToggleAudioLink()
         {
-            _audiolink.SetActive(aLState);
+            if(Utilities.IsValid(_audiolink)) _audiolink.SetActive(aLState);
             if (Utilities.IsValid(_audioLinkButton)) _audioLinkButton.color = aLState ? _audioLinkOnColor : _OffColor;
             SaveButtonAndColorDisable();
         }
@@ -268,20 +268,22 @@ namespace akaUdon
                 return;
             }
             colsState = !colsState;
-            ToggleColliders();
+            
+            ToggleHelperColliders(colsState, _colliders, _colliderButton, _collidersOnColor);
+            // ToggleColliders();
         }
 
-        private void ToggleColliders()
-        {
-            foreach (Collider c in _colliders)
-            {
-                if(Utilities.IsValid(c)) c.enabled = colsState;
-            }
-
-            if(Utilities.IsValid(_colliderButton)) _colliderButton.color = colsState ? _collidersOnColor : Color.gray;
-            SaveButtonAndColorDisable();
-
-        }
+        // private void ToggleColliders()
+        // {
+        //     foreach (Collider c in _colliders)
+        //     {
+        //         if(Utilities.IsValid(c)) c.enabled = colsState;
+        //     }
+        //
+        //     if(Utilities.IsValid(_colliderButton)) _colliderButton.color = colsState ? _collidersOnColor : Color.gray;
+        //     SaveButtonAndColorDisable();
+        //
+        // }
 
         #endregion
 
@@ -354,7 +356,7 @@ namespace akaUdon
 
         private void TogglePens()
         {
-            _pensObject.SetActive(pensState);
+            if(Utilities.IsValid(_pensObject)) _pensObject.SetActive(pensState);
             if(Utilities.IsValid(_pensButton))_pensButton.color = pensState ? _pensOnColor : _OffColor;
             SaveButtonAndColorDisable();
         }
@@ -404,6 +406,21 @@ namespace akaUdon
         
 
         #endregion
+
+        private void ToggleHelperColliders(bool state, Collider[] colliders, Image button, Color onColor)
+        {
+            foreach (Collider c in  colliders)
+            {
+                if (Utilities.IsValid(c)) c.enabled = state;
+            }
+             ToggleImageHelper(state, button, onColor);
+        }
+
+        private void ToggleImageHelper(bool state, Image button, Color onColor)
+        {
+            if (Utilities.IsValid(button)) button.color = state ? onColor : _OffColor;
+            SaveButtonAndColorDisable();
+        }
         
         
         //Everything in this region is used for handling persistence and binary to int conversion. I high recommend you do not edit this code.
@@ -494,7 +511,7 @@ namespace akaUdon
             aLState = stateStr[25] == '1';
             ToggleAudioLink();
             colsState = stateStr[26] == '1';
-            ToggleColliders();
+            ToggleHelperColliders(colsState, _colliders, _colliderButton, _collidersOnColor);
             pickupState= stateStr[27] == '1';
             TogglePickups();
             chairState = stateStr[28] == '1';
