@@ -16,3 +16,18 @@
 
        Press the Sync Button to save your preferred settings, the next time you enter the world you will have those same settings.
 
+### Public Methods for integrating to your own Canvas/Buttons
+    • _ResetFromDefault
+    • _GetPersistenceValues
+    • _SaveToPersistence
+    • _ToggleAudioLinkButton
+    • _ToggleCollidersButton
+    • _TogglePickupsButton
+    • _ToggleChairsButton
+    • _TogglePensButton
+    • _TogglePostProcessingButton
+    • _PpDarknessSlider
+    • _PpBloomSlider
+    • _ToggleCustomButtonOne
+    • _ToggleCustomButtonTwo
+    • _CustomSlider

@@ -29,7 +29,9 @@ namespace akaUdon
         
         //Custom code ends after this comment
         [SerializeField] private Slider _customSlider;
-        private float _customFloatState;
+        private float customFloatState;
+        [SerializeField] private Animator _customAnimator;
+        [SerializeField] private string _customFloatName;
         [SerializeField] private Image _customBoolStateButtonOne;
         [SerializeField] private Color _customBoolStateOnColorOne = Color.white;
         [SerializeField] private GameObject[] _customGameObjects1;
@@ -166,6 +168,23 @@ namespace akaUdon
                 ToggleObjectsHelper(pensState, new []{_pensObject}, _pensButton, _pensOnColor);
             }
 
+            if (_customGameObjects1.Length > 0 && Utilities.IsValid(_customGameObjects1[0]))
+            {
+                customBoolState1 = _customGameObjects1[0].activeSelf;
+                ToggleObjectsHelper(customBoolState1, _customGameObjects1, _customBoolStateButtonOne, _customBoolStateOnColorOne);
+            }
+            
+            if (_customGameObjects2.Length > 0 && Utilities.IsValid(_customGameObjects2[0]))
+            {
+                customBoolState2 = _customGameObjects2[0].activeSelf;
+                ToggleObjectsHelper(customBoolState2, _customGameObjects2, _customBoolStateButtonTwo, _customBoolStateOnColorTwo);
+            }
+
+            // if (Utilities.IsValid(_customAnimator))
+            // {
+            //     
+            // }
+
             if (!Utilities.IsValid(_ppAnimator))
             {
                 Debug.LogError($"{DateTime.Now} {gameObject.name}-The Post Processing Animator is not assigned");
@@ -181,26 +200,21 @@ namespace akaUdon
         public void _PpDarknessSlider()
         {
             lightState = _sliderLight.value;
-            SetAnimatorValue(lightnessAnim, lightState);
+            SetAnimatorValue(_ppAnimator, lightnessAnim, lightState);
         }
         
         public void _PpBloomSlider()
         {
             bloomSate = _sliderBloom.value;
-            SetAnimatorValue(bloomAnim, bloomSate);
+            SetAnimatorValue(_ppAnimator, bloomAnim, bloomSate);
         }
         
-        private void SetAnimatorValue(string name, float state)
-        {
-            _ppAnimator.SetFloat(name, state);
-            SaveButtonAndColorDisable();
-        }
+
 
         public void _TogglePostProcessingButton()
         {
             ppState = !ppState;
             TogglePostProcessing();
-            
         }
 
         private void TogglePostProcessing()
@@ -210,7 +224,7 @@ namespace akaUdon
             {
                 if (Utilities.IsValid(_postProcessingButton))
                 {
-                    _postProcessingButton.color = Color.white;
+                    _postProcessingButton.color = _ppOnColor;
                     foreach (Image i in _sliderImages)
                     {
                         i.color = _ppOnColor;
@@ -316,43 +330,22 @@ namespace akaUdon
         public void _ToggleCustomButtonOne()
         {
             customBoolState1 = !customBoolState1;
-            ToggleCustomOne();
+            ToggleObjectsHelper(customBoolState1, _customGameObjects1, _customBoolStateButtonOne, _customBoolStateOnColorOne);
         }
 
-        private void ToggleCustomOne()
-        {
-            //Custom code starts here
-
-            foreach (GameObject obj in _customGameObjects1)
-            {
-                if(Utilities.IsValid(obj)) obj.SetActive(obj);
-            }
-            
-            //Custom Code ends here
-            if(Utilities.IsValid(_customBoolStateButtonOne))_customBoolStateButtonOne.color = customBoolState1 ? _customBoolStateOnColorOne : _OffColor;
-            SaveButtonAndColorDisable();
-        }
         
         public void _ToggleCustomButtonTwo()
         {
             customBoolState2 = !customBoolState2;
-            ToggleCustomTwo();
+            ToggleObjectsHelper(customBoolState2, _customGameObjects2, _customBoolStateButtonTwo, _customBoolStateOnColorTwo);
         }
 
-        private void ToggleCustomTwo()
+        public void _CustomSlider()
         {
-            //Custom code starts here
+            customFloatState = _customSlider.value;
+            if(Utilities.IsValid(_customAnimator)) SetAnimatorValue(_customAnimator, _customFloatName, customFloatState);
             
-            foreach (GameObject obj in _customGameObjects2)
-            {
-                if(Utilities.IsValid(obj)) obj.SetActive(obj);
-            }
-            
-            //Custom Code ends here
-            if(Utilities.IsValid(_customBoolStateButtonTwo))_customBoolStateButtonTwo.color = customBoolState2 ? _customBoolStateOnColorTwo : _OffColor;
-            SaveButtonAndColorDisable();
         }
-        
 
         #endregion
 
@@ -397,6 +390,13 @@ namespace akaUdon
 
             return sb.ToString();
         }
+        
+        private void SetAnimatorValue(Animator animator, string name, float state)
+        {
+            animator.SetFloat(name, state);
+            SaveButtonAndColorDisable();
+        }
+        
         #endregion
         
         //Everything in this region is used for handling persistence and binary to int conversion. I high recommend you do not edit this code.
@@ -435,9 +435,8 @@ namespace akaUdon
             sb.Append(ConvertToNeededLength(Convert.ToString(sliderValueAsInt, 2),8));
             sliderValueAsInt = (int) (bloomSate * 255);
             sb.Append(ConvertToNeededLength(Convert.ToString(sliderValueAsInt, 2),8));
-            //add 3rd slider as temp todo
-            sb.Append("00000000");
-            //end add 3rd slider as temp
+            sliderValueAsInt = (int) (customFloatState * 255);
+            sb.Append(ConvertToNeededLength(Convert.ToString(sliderValueAsInt, 2), 8));
             //Appends 0 or 1 to the string depending on the state of the button.
             sb.Append(ppState ? "1" : "0");
             sb.Append(aLState ? "1" : "0");
@@ -470,18 +469,22 @@ namespace akaUdon
             
             lightState = (float) Convert.ToInt32(tempStr, 2) / 255;
 
-            SetAnimatorValue(lightnessAnim, lightState);
+            SetAnimatorValue(_ppAnimator, lightnessAnim, lightState);
             _sliderLight.value = lightState;
 
             tempStr = stateStr.Substring(8, 8);
             
             bloomSate = (float) Convert.ToInt32(tempStr, 2) / 255;
-            SetAnimatorValue(bloomAnim, bloomSate);
+            SetAnimatorValue(_ppAnimator, bloomAnim, bloomSate);
             _sliderBloom.value = bloomSate;
 
             
             //todo get values for optional slider
-
+            tempStr = stateStr.Substring(16, 8);
+            customFloatState = (float) Convert.ToInt32(tempStr, 2) / 255;
+            if(Utilities.IsValid(_customAnimator)) SetAnimatorValue(_customAnimator, _customFloatName, customFloatState);
+            if(Utilities.IsValid(_customSlider)) _customSlider.value = customFloatState;
+            
             ppState = stateStr[24] == '1';
             TogglePostProcessing();
             aLState = stateStr[25] == '1';
