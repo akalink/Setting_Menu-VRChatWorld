@@ -95,8 +95,18 @@ namespace akaUdon
         
         #endregion
 
-
+        #region initalization
         void Start()
+        {
+            InitializePostProcessing();
+            InitializeOther();
+                
+            SaveButtonAndColorDisable();
+
+            defaultstate = ConvertToBinary();
+        }
+
+        private void InitializePostProcessing()
         {
             //assign state and object of post processing
             if (Utilities.IsValid(_ppAnimator))
@@ -113,8 +123,7 @@ namespace akaUdon
                 sl = _sliderLight.gameObject.GetComponentsInChildren<Image>();
                 lightState = _sliderLight.value;
             }
-
-
+            
             if (Utilities.IsValid(_sliderBloom))
             {
                 bl = _sliderBloom.gameObject.GetComponentsInChildren<Image>();
@@ -134,8 +143,11 @@ namespace akaUdon
                     _sliderImages[i] = bl[i-sl.Length];
                 }
             }
-            
-            //assigns buttons
+        }
+
+        private void InitializeOther()
+        {
+         //assigns buttons
 
             if (_colliders.Length > 0 && Utilities.IsValid(_colliders[0]))
             {
@@ -179,34 +191,26 @@ namespace akaUdon
                 customBoolState2 = _customGameObjects2[0].activeSelf;
                 ToggleObjectsHelper(customBoolState2, _customGameObjects2, _customBoolStateButtonTwo, _customBoolStateOnColorTwo);
             }
-
-            // if (Utilities.IsValid(_customAnimator))
-            // {
-            //     
-            // }
-
+            
             if (!Utilities.IsValid(_ppAnimator))
             {
                 Debug.LogError($"{DateTime.Now} {gameObject.name}-The Post Processing Animator is not assigned");
-            }
-            SaveButtonAndColorDisable();
-
-            defaultstate = ConvertToBinary();
+            }   
         }
-        
+        #endregion
 
         #region PostProcessing
 
         public void _PpDarknessSlider()
         {
             lightState = _sliderLight.value;
-            SetAnimatorValue(_ppAnimator, lightnessAnim, lightState);
+            if(Utilities.IsValid(_ppAnimator)) SetAnimatorValue(_ppAnimator, lightnessAnim, lightState);
         }
         
         public void _PpBloomSlider()
         {
             bloomSate = _sliderBloom.value;
-            SetAnimatorValue(_ppAnimator, bloomAnim, bloomSate);
+            if(Utilities.IsValid(_ppAnimator)) SetAnimatorValue(_ppAnimator, bloomAnim, bloomSate);
         }
         
 
@@ -219,10 +223,11 @@ namespace akaUdon
 
         private void TogglePostProcessing()
         {
-            _ppObject.SetActive(ppState);
-            if (ppState)
+            if(Utilities.IsValid(_ppAnimator)) _ppObject.SetActive(ppState);
+
+            if (Utilities.IsValid(_postProcessingButton))
             {
-                if (Utilities.IsValid(_postProcessingButton))
+                if (ppState)
                 {
                     _postProcessingButton.color = _ppOnColor;
                     foreach (Image i in _sliderImages)
@@ -230,11 +235,7 @@ namespace akaUdon
                         i.color = _ppOnColor;
                     }
                 }
-   
-            }
-            else
-            {
-                if (Utilities.IsValid(_postProcessingButton))
+                else
                 {
                     _postProcessingButton.color = _OffColor;
                     foreach (Image i in _sliderImages)
@@ -242,8 +243,8 @@ namespace akaUdon
                         i.color = _OffColor;
                     }
                 }
-
             }
+
             SaveButtonAndColorDisable();
         }
         #endregion
@@ -469,17 +470,15 @@ namespace akaUdon
             
             lightState = (float) Convert.ToInt32(tempStr, 2) / 255;
 
-            SetAnimatorValue(_ppAnimator, lightnessAnim, lightState);
-            _sliderLight.value = lightState;
+            if(Utilities.IsValid(_ppAnimator))SetAnimatorValue(_ppAnimator, lightnessAnim, lightState);
+            if(Utilities.IsValid(_sliderLight)) _sliderLight.value = lightState;
 
             tempStr = stateStr.Substring(8, 8);
             
             bloomSate = (float) Convert.ToInt32(tempStr, 2) / 255;
-            SetAnimatorValue(_ppAnimator, bloomAnim, bloomSate);
-            _sliderBloom.value = bloomSate;
-
+            if(Utilities.IsValid(_ppAnimator))SetAnimatorValue(_ppAnimator, bloomAnim, bloomSate);
+            if(Utilities.IsValid(_sliderBloom)) _sliderBloom.value = bloomSate;
             
-            //todo get values for optional slider
             tempStr = stateStr.Substring(16, 8);
             customFloatState = (float) Convert.ToInt32(tempStr, 2) / 255;
             if(Utilities.IsValid(_customAnimator)) SetAnimatorValue(_customAnimator, _customFloatName, customFloatState);

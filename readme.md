@@ -17,17 +17,17 @@
        Press the Sync Button to save your preferred settings, the next time you enter the world you will have those same settings.
 
 ### Public Methods for integrating to your own Canvas/Buttons
-    • _ResetFromDefault
-    • _GetPersistenceValues
-    • _SaveToPersistence
-    • _ToggleAudioLinkButton
-    • _ToggleCollidersButton
-    • _TogglePickupsButton
-    • _ToggleChairsButton
-    • _TogglePensButton
-    • _TogglePostProcessingButton
-    • _PpDarknessSlider
-    • _PpBloomSlider
-    • _ToggleCustomButtonOne
-    • _ToggleCustomButtonTwo
-    • _CustomSlider
+    • _ResetFromDefault (Resets everything to default)
+    • _GetPersistenceValues (Resets everything to last save)
+    • _SaveToPersistence (Saves the current options)
+    • _ToggleAudioLinkButton (Toggles AudioLink On/Off)
+    • _ToggleCollidersButton (Toggles Colliders On/Off)
+    • _TogglePickupsButton (Toggles Pickups On/Off)
+    • _ToggleChairsButton (Toggles Chairs On/Off)
+    • _TogglePensButton (Toggles Pens On/Off)
+    • _TogglePostProcessingButton (Toggle Post Processing On/Off)
+    • _PpDarknessSlider (Adjusts the darkness/lightness created by post processing)
+    • _PpBloomSlider (Adjusts the amount of bloom created by post processing)
+    • _ToggleCustomButtonOne (Toggles the object(s) assigned to custom 1 on/off)
+    • _ToggleCustomButtonTwo (Toggles the object(s) assigned to custom 2 on/off)
+    • _CustomSlider (Adjusts the value pushed to an animator)
