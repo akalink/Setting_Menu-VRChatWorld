@@ -68,7 +68,8 @@ namespace akaUdon
             }
             else
             {
-                EditorUtility.DisplayDialog("Missing VRCWorld", "A VRC Scene Descriptor does not exist yet. Please Add one and try again", "ok");
+                EditorUtility.DisplayDialog("Missing VRCWorld", "A VRC Scene Descriptor does not exist yet. Please Add one and try again or " +
+                                                                "go to Tools -> Settings Menu -> Add a Scene Descriptor to your Scene", "ok");
                 camera = FindCameraInScene();
             }
             
