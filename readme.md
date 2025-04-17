@@ -1,6 +1,6 @@
 # Settings Menu Prefab
 
-
+If you find a bug please report to **mcphersonsound** on discord with steps to recreate the issue.
 
 ### Requirements
     • The newest VRChat World SDK.
