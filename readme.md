@@ -7,7 +7,7 @@ If you find a bug please report to **mcphersonsound** on discord with steps to r
     • Text Mesh Pro (it will ask to import if you do not have it)
 
 ### Basic Instructions Summary:
-   1. Download the Prefab file from **Releases** on the right of this. Download the most recent release.
+   1. Download the Prefab file from **Releases** on the right of this. [Download the most recent release.](https://github.com/akalink/Setting_Menu-VRChatWorld/releases)
    2. Import the prefab into your scene and go to the "Settings Menu" folder in the assets folder
    3. Drag and drop the prefab into your scene and move it to wherever you want. Do not double click the prefab.
         ![a image of the location of the prefab](https://github.com/akalink/Setting_Menu-VRChatWorld/blob/develop/documentationAssets/Prefabfile.png?raw=true)
