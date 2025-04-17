@@ -9,8 +9,9 @@
 ### Basic Instructions Summary:
    1. Download the Prefab file from **Releases** on the right of this. Download the most recent release.
    2. Import the prefab into your scene and go to the "Settings Menu" folder in the assets folder
-   3. Drag and drop the prefab into your scene and move it to where ever you want. 
+   3. Drag and drop the prefab into your scene and move it to wherever you want. Do not double click the prefab.
    4. If you don’t have post processing set up, use the included editor script to set it up for you.
+       - Go to Tools -> Settings Menu -> Add the Post Processing Layer
    5. Assign objects to the Udon Component, disable any settings you don’t need. 
    
 
