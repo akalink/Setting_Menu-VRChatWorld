@@ -16,18 +16,16 @@ namespace akaUdon
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class SettingsMenu : UdonSharpBehaviour
     {
+        [Header("This effects all options, choose what color to tint the \"off setting\"\nand choose if that is on at all")]
         #region instance variables
         [SerializeField] Color _OffColor = Color.grey;
         [SerializeField] private bool _toggleColor = true;
         private readonly string settings = "akalink-Settings";
         private int defaultstate;
+        private readonly string savedText = "Saved";
+        private readonly string notSavedText = "Not\nSaved";
 
         [Header("These are custom Options, feel free to edit the code without issue")]
-        //Custom Options after this comment
-
-
-        
-        //Custom code ends after this comment
         [SerializeField] private Slider _customSlider;
         private float customFloatState;
         [SerializeField] private Animator _customAnimator;
@@ -509,14 +507,14 @@ namespace akaUdon
         {
             if(Utilities.IsValid(_saveButton))_saveButton.color = _OffColor;
             _savedToPersistence = false;
-            _persistenceText.text = "Not\nSynced";
+            _persistenceText.text = notSavedText;
         }
 
         private void SaveButtonAndColorEnabled()
         {
             if(Utilities.IsValid(_saveButton))_saveButton.color = _saveButtonOnColor;
             _savedToPersistence = true;
-            _persistenceText.text = "Synced";
+            _persistenceText.text = savedText;
         }
 
         #endregion
