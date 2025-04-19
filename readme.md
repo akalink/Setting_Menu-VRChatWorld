@@ -16,7 +16,7 @@ If you find a bug please report to **mcphersonsound** on discord with steps to r
   
         ![a image of the location of the editor script option](https://github.com/akalink/Setting_Menu-VRChatWorld/blob/develop/documentationAssets/EditorScript.PNG?raw=true)
    5. Assign objects to the Udon Component. To assign, drag and drop any objects from the Hierarchy to the name of the setting in the Settings Menu. For example, drag any chairs you want to toggle to "Chair Colliders"
-        ![a image of the drag and drop functionality](https://github.com/akalink/Setting_Menu-VRChatWorld/blob/develop/documentationAssets/EditorScript.PNG?raw=true)
+        ![a image of the drag and drop functionality](https://github.com/akalink/Setting_Menu-VRChatWorld/blob/develop/documentationAssets/DragDrop.png?raw=true)
    6. Disable any settings you don’t need. 
           Press the Save Button to save your preferred settings, the next time you enter the world you will have those same settings.
 
