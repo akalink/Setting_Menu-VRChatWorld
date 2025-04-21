@@ -53,6 +53,8 @@ namespace akaUdon
         private GameObject _ppObject;
         [SerializeField] private Image _postProcessingButton;
         private Image[] _sliderImages;
+        private bool inAndroid;
+        
 
         [Header("Put AudioLink Here")] [SerializeField]
         private Color _audioLinkOnColor = Color.white;
@@ -106,6 +108,9 @@ namespace akaUdon
 
         private void InitializePostProcessing()
         {
+            #if ANDROID
+            inAndroid = true;
+            #endif
             //assign state and object of post processing
             if (Utilities.IsValid(_ppAnimator))
             {
@@ -141,6 +146,18 @@ namespace akaUdon
                     _sliderImages[i] = bl[i-sl.Length];
                 }
             }
+
+            if (inAndroid)
+            {
+                ppState = false;
+            }
+            else
+            {
+                ppState = _ppObject.activeSelf;
+            }
+            
+            TogglePostProcessing();
+
         }
 
         private void InitializeOther()
@@ -201,12 +218,14 @@ namespace akaUdon
 
         public void _PpDarknessSlider()
         {
+            if(inAndroid) return;
             lightState = _sliderLight.value;
             if(Utilities.IsValid(_ppAnimator)) SetAnimatorValue(_ppAnimator, lightnessAnim, lightState);
         }
         
         public void _PpBloomSlider()
         {
+            if(inAndroid) return;
             bloomSate = _sliderBloom.value;
             if(Utilities.IsValid(_ppAnimator)) SetAnimatorValue(_ppAnimator, bloomAnim, bloomSate);
         }
@@ -215,6 +234,7 @@ namespace akaUdon
 
         public void _TogglePostProcessingButton()
         {
+            if(inAndroid) return;
             ppState = !ppState;
             TogglePostProcessing();
         }
