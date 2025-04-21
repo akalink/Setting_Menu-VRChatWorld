@@ -10,7 +10,7 @@ using UnityEngine.UI;
 using VRC.SDK3.Persistence;
 using VRC.SDKBase;
 
-
+//version 0.02b
 namespace akaUdon
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
