@@ -3,11 +3,11 @@
 If you find a bug please report to **mcphersonsound** on discord with steps to recreate the issue.
 
 ## Requirements
-    • The newest VRChat World SDK.
-    • Text Mesh Pro (it will ask to import if you do not have it)
+- The newest VRChat World SDK.
+-  Text Mesh Pro (it will ask to import if you do not have it)
 
 ### Demo Scene Requirements
-    • Audiolink, get it from the creator companion
+- Audiolink, get it from the creator companion
 
 ## Basic Instructions Summary:
    1. Download the Prefab file from **Releases** on the right of this. [Download the most recent release.](https://github.com/akalink/Setting_Menu-VRChatWorld/releases)
@@ -23,30 +23,30 @@ If you find a bug please report to **mcphersonsound** on discord with steps to r
         ![a image of the drag and drop functionality](https://github.com/akalink/Setting_Menu-VRChatWorld/blob/develop/documentationAssets/DragDrop.png?raw=true)
    6. Disable any settings you don’t need. 
           
-    Press the Save Button to save your preferred settings, the next time you enter the world you will have those same settings.
+Press the Save Button to save your preferred settings, the next time you enter the world you will have those same settings.
 
 ### Adjusting Post Processing Settings
-    It is encouraged to adjust The Post Processing settings to suit your needs.
-    • Post Processing Volume Main will contain only effects that are not adjusted in game (Color Grading, etc)
-    • Volume Low and High Bloom will contain adjustable Bloom.
-    • Volume Bright and Dark will contain adjustable Darkness. To make the world brightness higher, adjust "Minimum (EV) to be lower. To make the world darkness lower, adjust  "Maximum (EV)" to be higher.
+It is encouraged to adjust The Post Processing settings to suit your needs.
+- Post Processing Volume Main will contain only effects that are not adjusted in game (Color Grading, etc)
+- Volume Low and High Bloom will contain adjustable Bloom.
+- Volume Bright and Dark will contain adjustable Darkness. To make the world brightness higher, adjust "Minimum (EV) to be lower. To make the world darkness lower, adjust  "Maximum (EV)" to be higher.
 
 
 ## Public Methods for integrating to your own Canvas/Buttons
-    • _ResetFromDefault (Resets everything to default)
-    • _GetPersistenceValues (Resets everything to last save)
-    • _SaveToPersistence (Saves the current options)
-    • _ToggleAudioLinkButton (Toggles AudioLink On/Off)
-    • _ToggleCollidersButton (Toggles Colliders On/Off)
-    • _TogglePickupsButton (Toggles Pickups On/Off)
-    • _ToggleChairsButton (Toggles Chairs On/Off)
-    • _TogglePensButton (Toggles Pens On/Off)
-    • _TogglePostProcessingButton (Toggle Post Processing On/Off)
-    • _PpDarknessSlider (Adjusts the darkness/lightness created by post processing)
-    • _PpBloomSlider (Adjusts the amount of bloom created by post processing)
-    • _ToggleCustomButtonOne (Toggles the object(s) assigned to custom 1 on/off)
-    • _ToggleCustomButtonTwo (Toggles the object(s) assigned to custom 2 on/off)
-    • _CustomSlider (Adjusts the value pushed to an animator)
+- _ResetFromDefault (Resets everything to default)
+- _GetPersistenceValues (Resets everything to last save)
+- _SaveToPersistence (Saves the current options)
+- _ToggleAudioLinkButton (Toggles AudioLink On/Off)
+- _ToggleCollidersButton (Toggles Colliders On/Off)
+- _TogglePickupsButton (Toggles Pickups On/Off)
+- _ToggleChairsButton (Toggles Chairs On/Off)
+- _TogglePensButton (Toggles Pens On/Off)
+- _TogglePostProcessingButton (Toggle Post Processing On/Off)
+- _PpDarknessSlider (Adjusts the darkness/lightness created by post processing)
+- _PpBloomSlider (Adjusts the amount of bloom created by post processing)
+- _ToggleCustomButtonOne (Toggles the object(s) assigned to custom 1 on/off)
+- _ToggleCustomButtonTwo (Toggles the object(s) assigned to custom 2 on/off)
+- _CustomSlider (Adjusts the value pushed to an animator)
 
 ## FAQ
  - Q: None of the post processing options are doing anything.
