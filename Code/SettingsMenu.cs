@@ -10,24 +10,22 @@ using UnityEngine.UI;
 using VRC.SDK3.Persistence;
 using VRC.SDKBase;
 
-
+//version 0.02b
 namespace akaUdon
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class SettingsMenu : UdonSharpBehaviour
     {
+        [Header("This effects all options, choose what color to tint the \"off setting\"\nand choose if that is on at all")]
         #region instance variables
         [SerializeField] Color _OffColor = Color.grey;
         [SerializeField] private bool _toggleColor = true;
         private readonly string settings = "akalink-Settings";
         private int defaultstate;
+        private readonly string savedText = "Saved";
+        private readonly string notSavedText = "Not\nSaved";
 
         [Header("These are custom Options, feel free to edit the code without issue")]
-        //Custom Options after this comment
-
-
-        
-        //Custom code ends after this comment
         [SerializeField] private Slider _customSlider;
         private float customFloatState;
         [SerializeField] private Animator _customAnimator;
@@ -55,6 +53,8 @@ namespace akaUdon
         private GameObject _ppObject;
         [SerializeField] private Image _postProcessingButton;
         private Image[] _sliderImages;
+        private bool inAndroid;
+        
 
         [Header("Put AudioLink Here")] [SerializeField]
         private Color _audioLinkOnColor = Color.white;
@@ -108,6 +108,9 @@ namespace akaUdon
 
         private void InitializePostProcessing()
         {
+            #if ANDROID
+            inAndroid = true;
+            #endif
             //assign state and object of post processing
             if (Utilities.IsValid(_ppAnimator))
             {
@@ -143,6 +146,18 @@ namespace akaUdon
                     _sliderImages[i] = bl[i-sl.Length];
                 }
             }
+
+            if (inAndroid)
+            {
+                ppState = false;
+            }
+            else
+            {
+                if(Utilities.IsValid(_ppObject)) ppState = _ppObject.activeSelf;
+            }
+            
+            TogglePostProcessing();
+
         }
 
         private void InitializeOther()
@@ -203,12 +218,14 @@ namespace akaUdon
 
         public void _PpDarknessSlider()
         {
+            if(inAndroid) return;
             lightState = _sliderLight.value;
             if(Utilities.IsValid(_ppAnimator)) SetAnimatorValue(_ppAnimator, lightnessAnim, lightState);
         }
         
         public void _PpBloomSlider()
         {
+            if(inAndroid) return;
             bloomSate = _sliderBloom.value;
             if(Utilities.IsValid(_ppAnimator)) SetAnimatorValue(_ppAnimator, bloomAnim, bloomSate);
         }
@@ -217,6 +234,7 @@ namespace akaUdon
 
         public void _TogglePostProcessingButton()
         {
+            if(inAndroid) return;
             ppState = !ppState;
             TogglePostProcessing();
         }
@@ -509,14 +527,14 @@ namespace akaUdon
         {
             if(Utilities.IsValid(_saveButton))_saveButton.color = _OffColor;
             _savedToPersistence = false;
-            _persistenceText.text = "Not\nSynced";
+            if(Utilities.IsValid(_persistenceText)) _persistenceText.text = notSavedText;
         }
 
         private void SaveButtonAndColorEnabled()
         {
             if(Utilities.IsValid(_saveButton))_saveButton.color = _saveButtonOnColor;
             _savedToPersistence = true;
-            _persistenceText.text = "Synced";
+            if(Utilities.IsValid(_persistenceText)) _persistenceText.text = savedText;
         }
 
         #endregion
