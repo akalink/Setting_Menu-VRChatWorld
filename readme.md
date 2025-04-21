@@ -12,7 +12,8 @@ If you find a bug please report to **mcphersonsound** on discord with steps to r
 ## Basic Instructions Summary:
    1. Download the Prefab file from **Releases** on the right of this. [Download the most recent release.](https://github.com/akalink/Setting_Menu-VRChatWorld/releases)
    2. Import the prefab into your scene and go to the "Settings Menu" folder in the assets folder
-   3. Drag and drop the prefab into your scene and move it to wherever you want. Do not double click the prefab.
+   3. Drag and drop the prefab into your scene (either the scene view or hierarchy) and move it to wherever you want. Do not double click the prefab.
+   
         ![a image of the location of the prefab](https://github.com/akalink/Setting_Menu-VRChatWorld/blob/develop/documentationAssets/Prefabfile.png?raw=true)
    4. If you don’t have post processing set up, use the included editor script to set it up for you.
        - Go to Tools -> Settings Menu -> Add the Post Processing Layer
@@ -23,6 +24,12 @@ If you find a bug please report to **mcphersonsound** on discord with steps to r
    6. Disable any settings you don’t need. 
           
     Press the Save Button to save your preferred settings, the next time you enter the world you will have those same settings.
+
+### Adjusting Post Processing Settings
+    It is encouraged to adjust The Post Processing settings to suit your needs.
+    • Post Processing Volume Main will contain only effects that are not adjusted in game (Color Grading, etc)
+    • Volume Low and High Bloom will contain adjustable Bloom.
+    • Volume Bright and Dark will contain adjustable Darkness. To make the world brightness higher, adjust "Minimum (EV) to be lower. To make the world darkness lower, adjust  "Maximum (EV)" to be higher.
 
 
 ## Public Methods for integrating to your own Canvas/Buttons
@@ -47,6 +54,12 @@ If you find a bug please report to **mcphersonsound** on discord with steps to r
   
  - Q: How do I assign objects to the Settings Menu prefab?
  - A: Drag the objects into respective slots in the Udon component. The inspector can be locked to prevent keep the desired window active. Check the demo scene to see how things are assigned.
+  
+ - Q: Can I add extra options?
+ - A: Yes there are 3 extra options named "Custom" in the component. You are given 2 extra toggles and a slider.
+ - Q:
+ - Q: I don't like Post Processing setting provided.
+ - A: You can change the setting to suit your liking. 
   
  - Q: Can I upload the demo scene as my own world and take pieces of it for my own world?
  - A: Yes, credit is optional.

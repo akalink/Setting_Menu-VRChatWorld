@@ -153,7 +153,7 @@ namespace akaUdon
             }
             else
             {
-                ppState = _ppObject.activeSelf;
+                if(Utilities.IsValid(_ppObject)) ppState = _ppObject.activeSelf;
             }
             
             TogglePostProcessing();
@@ -527,14 +527,14 @@ namespace akaUdon
         {
             if(Utilities.IsValid(_saveButton))_saveButton.color = _OffColor;
             _savedToPersistence = false;
-            _persistenceText.text = notSavedText;
+            if(Utilities.IsValid(_persistenceText)) _persistenceText.text = notSavedText;
         }
 
         private void SaveButtonAndColorEnabled()
         {
             if(Utilities.IsValid(_saveButton))_saveButton.color = _saveButtonOnColor;
             _savedToPersistence = true;
-            _persistenceText.text = savedText;
+            if(Utilities.IsValid(_persistenceText)) _persistenceText.text = savedText;
         }
 
         #endregion
